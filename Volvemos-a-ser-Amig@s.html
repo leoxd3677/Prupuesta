@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¿Volvemos a ser amig@s? 💗</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background: #fff4fa;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.container {
+  text-align: center;
+  max-width: 420px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+#mainImg {
+ 
+  width: 100%; 
+
+  border-radius: 16px;
+  transition: all .4s ease;
+  box-shadow: 0 6px 15px rgba(255,150,180,0.3);
+}
+
+h1 {
+  font-size: 26px;
+  color: #ff6fa8;
+  font-weight: 700;
+  text-shadow: 1px 1px 3px #fff;
+  margin-top: 5px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+button {
+  padding: 12px 22px;
+  font-size: 18px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: .3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+#yesBtn {
+  background: #ff9fcd;
+  color: #fff;
+  position: relative;
+  z-index: 1;
+}
+
+#yesBtn:hover {
+  background: #ff77b7;
+  transform: scale(1.1);
+}
+
+#noBtn {
+  background: #ffd1df;
+  color: #ff3d6f;
+    position: relative;
+  z-index: 9999; /* siempre encima */
+}
+
+#noBtn:hover {
+  background: #ffb6c7;
+  transform: translateY(-2px);
+
+}
+
+#finalMessage {
+  display: none;
+  font-size: 28px;
+  font-weight: 700;
+  color: #ff6fa8;
+  text-shadow: 1px 1px 3px #fff;
+  animation: heartBeat 2s infinite;
+}
+
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+/* Confetti hearts falling */
+.heart {
+  position: fixed;
+  top: -10px;
+  font-size: 22px;
+  animation: fall linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+</style>
+ 
+</head>
+<body>
+
+<div class="container">
+
+  <img id="mainImg" src="https://i.pinimg.com/1200x/34/f7/7b/34f77bdaf8498cb67e57bc4b4893b5a5.jpg">
+
+  <h1 id="question">¿Podemos volver a ser amig@s? 🥺💗</h1>
+
+  <div class="buttons" id="btnGroup">
+    <button id="yesBtn">Sí 💕</button>
+    <button id="noBtn">No 😢</button>
+  </div>
+
+  <div id="finalMessage">💗 ¡Sabía que dirías que sí! Amig@s para siempre 💗</div>
+
+</div>
+
+<script>
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const img = document.getElementById("mainImg");
+const finalMessage = document.getElementById("finalMessage");
+const question = document.getElementById("question");
+const btnGroup = document.getElementById("btnGroup");
+
+let step = 0;
+
+// Frases + imágenes (bucle infinito)
+const steps = [
+  { text: "¿Seguro que no quieres volver a ser mi amigo? 😣", img: "https://i.pinimg.com/736x/ab/c2/13/abc2131d5e2f34493d8af91abde6b74b.jpg" },
+  { text: "¿Ni compartir recuerdos bonitos? 😔", img: "https://i.pinimg.com/736x/f0/db/89/f0db89944ed03e4328337c5f9d42a3a3.jpg" },
+  { text: "¿Ni reír como antes? 😢", img: "https://i.pinimg.com/736x/a2/21/0c/a2210c96613f918ec43f2ebbe4996d79.jpg" },
+  { text: "¿Ni apoyarnos cuando más lo necesitamos? 🥺", img: "https://i.pinimg.com/736x/fb/60/1e/fb601ee330dfb714d85e5c2b8ff3107c.jpg" },
+  { text: "¿Ni recordar nuestras aventuras? 😣", img: "https://i.pinimg.com/736x/91/57/c3/9157c374c9be1928391d6e8915f62444.jpg" },
+  { text: "¿Ni darnos otra oportunidad? 💔", img: "https://i.pinimg.com/736x/8d/55/3b/8d553b1699cb6ab6036820bd0effa614.jpg" },
+  { text: "¿De verdad no quieres intentarlo? 😭", img: "https://i.pinimg.com/736x/8d/55/3b/8d553b1699cb6ab6036820bd0effa614.jpg" }
+];
+
+// AL HACER CLICK EN NO
+noBtn.addEventListener("click", () => {
+  
+  // Asignar frase + imagen correspondiente
+  const s = steps[step];
+  noBtn.textContent = s.text;
+  img.src = s.img;
+
+  // Hacer crecer el botón SÍ cada vez más (sin límite)
+  let currentScale = parseFloat(yesBtn.getAttribute("data-scale")) || 1;
+  currentScale += 0.2; // crece 20% cada clic
+  yesBtn.style.transform = `scale(${currentScale})`;
+  yesBtn.setAttribute("data-scale", currentScale);
+
+  // Avanzar al siguiente paso (sin reiniciar, bucle infinito)
+  step = (step + 1) % steps.length; 
+});
+
+
+// AL HACER CLICK EN SÍ
+yesBtn.addEventListener("click", () => {
+  img.src = "https://i.pinimg.com/originals/88/14/9b/88149b0400750578f4d07d9bc3fb0fee.gif";
+
+  question.style.display = "none";
+  btnGroup.style.display = "none";
+  finalMessage.style.display = "block";
+
+  launchHearts();
+});
+
+
+// CORAZONES CAYENDO
+function launchHearts() {
+  for (let i = 0; i < 35; i++) {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.textContent = "💖";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (3 + Math.random() * 3) + "s";
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 6000);
+  }
+}
+</script>
+
+
+</body>
+</html>
